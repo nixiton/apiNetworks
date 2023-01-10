@@ -1,0 +1,8 @@
+version: '3'
+services:
+  stats:
+    build: stats
+    volumes:
+      - ../stats:/code
+    ports:
+      - "8000:8000"
