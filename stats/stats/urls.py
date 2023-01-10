@@ -22,5 +22,5 @@ from networkApp.views import *
 
 urlpatterns = [
     url(r'^administrate/', admin.site.urls),
-    url(r'^networkApi/', NetworkApi.as_view(),  name='netApi'),
+    url(r'^networkApi/', NetworkAPI.as_view(),  name='netApi'),
 ]
