@@ -50,7 +50,7 @@ def lamber93_to_gps(x, y):
 
 
 def replace_lambert93_by_gps(df):
-	dfXY = df[['X', 'Y']]
+	dfXY = df[['X', 'Y']].copy()
 	dfXY[['lat', 'lng']] = dfXY.parallel_apply(lambda row : pandas.Series((lamber93_to_gps(row['X'], row['Y']))), axis = 1)
 	dfXY.drop(['X', 'Y'],axis=1, inplace=True)
 	df = pandas.concat([df, dfXY], axis=1)
@@ -72,23 +72,26 @@ def replace_long_lat_by_city(df):
 	buffer = io.StringIO(data)
 	data_df = pandas.read_csv(buffer, delimiter=',', header=0)
 	data_df.dropna(subset=['result_city'], inplace=True)
-	op_city_df = pandas.merge(df,data_df[['lng', 'lat', 'result_city']], on = ['lat','lng']).drop(['lat', 'lng'], axis = 1)
+
+	df = df.round({'lng': 2, 'lat': 2})
+	data_df = data_df[['lng', 'lat', 'result_city']]
+	data_df = data_df.round({'lng': 2, 'lat': 2})
+
+	op_city_df = pandas.merge(df,data_df, on = ['lat','lng']).drop(['lat', 'lng'], axis = 1)
 	op_city_df.drop_duplicates(inplace=True)
 	op_city_df.to_csv('static/op_city_df.csv', index=False)
 	return op_city_df
 
+#df = get_data_frame()
+#op_df = replace_code_by_operator(df)
+#op_gps_df = replace_lambert93_by_gps(op_df)
+#op_gps_df = pandas.read_csv('static/processed_op_gps_df.csv',
+#                                          header=0,
+#                                          delimiter=',')
+#op_city_df = replace_long_lat_by_city(op_gps_df)
+op_city_df = pandas.read_csv('static/op_city_df.csv',
+                                          header=0,
+                                          delimiter=',')
 
-if __name__ == "__main__":
-	#df = get_data_frame()
-	#op_df = replace_code_by_operator(df)
-	#op_gps_df = replace_lambert93_by_gps(op_df)
-	op_gps_df = pandas.read_csv('static/processed_op_gps_df.csv',
-	                                          header=0,
-	                                          delimiter=',')
-	#op_city_df = replace_long_lat_by_city(op_gps_df)
-	op_city_df = pandas.read_csv('static/op_city_df.csv',
-	                                          header=0,
-	                                          delimiter=',')
-
-	print(op_city_df)
+print(op_city_df)
 
