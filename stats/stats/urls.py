@@ -17,11 +17,10 @@ Including another URLconf
 from django.conf.urls import url
 
 from django.contrib import admin
-from django.urls import path
 
 from networkApp.views import *
 
 urlpatterns = [
     url(r'^administrate/', admin.site.urls),
-    #url(r'^initDb/', FetchingAPI.as_view(),  name='initDbApi'),
+    url(r'^networkApi/', NetworkApi.as_view(),  name='netApi'),
 ]
