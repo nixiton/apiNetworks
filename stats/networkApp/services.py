@@ -20,5 +20,5 @@ def getNetworkGroupedByOperators(list):
 
 def getCityFromPostCode(postCode):
 	nomi = pgeocode.Nominatim('fr')
-	city = nomi.query_postal_code("75013")
+	city = nomi.query_postal_code(postCode)
 	return city[5]
