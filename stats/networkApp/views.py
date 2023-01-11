@@ -15,5 +15,12 @@ class NetworkAPI(APIView):
         adress = request.GET['q']
         city = adress.split(" ")[-1]
         infonet = NetworkOperatorCity.objects.select_related('city').select_related('operator').select_related('network').filter(city__name = city)
-        infonet = NOCSerializer(infonet, many=True)
-        return Response(infonet.data, status = 200)
+        infonet = getNetworkGroupedByOperators(infonet)
+        #infonet = NOCSerializer(infonet, many=True)
+
+        if(len(infonet) == 0):
+            city = getCityFromPostCode(city)
+            infonet = NetworkOperatorCity.objects.select_related('city').select_related('operator').select_related('network').filter(city__name = city)
+            infonet = getNetworkGroupedByOperators(infonet)
+
+        return Response(infonet, status = 200)

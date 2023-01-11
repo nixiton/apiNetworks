@@ -21,3 +21,5 @@ django-cors-headers
 pyproj
 
 pandarallel
+
+pgeocode
