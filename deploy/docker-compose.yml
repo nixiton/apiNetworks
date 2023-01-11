@@ -1,8 +1,27 @@
 version: '3'
 services:
+  mariadb:
+    image: mariadb:10.4
+    environment:
+      MYSQL_ROOT_PASSWORD: "$MYSQL_ROOT_PASSWORD"
+      MYSQL_DATABASE: "$MYSQL_DATABASE"
+      MYSQL_USER: "$MYSQL_USER"
+      MYSQL_PASSWORD: "$MYSQL_PASSWORD"
+    volumes:
+      - ./mariadb/db:/var/lib/mysql
+      - ./mariadb/conf/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./mariadb/log:/var/log/mysql
+  adminer:
+    image: adminer
+    ports:
+      - '5100:8080'
+    depends_on:
+      - mariadb
   stats:
     build: stats
     volumes:
       - ../stats:/code
     ports:
       - "8000:8000"
+    depends_on:
+      - mariadb

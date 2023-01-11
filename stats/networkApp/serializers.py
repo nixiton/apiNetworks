@@ -1,15 +1,14 @@
 from rest_framework import serializers
 from .models import *
 
-"""
-class SocietySerializer(serializers.ModelSerializer):
+
+class NOCSerializer(serializers.ModelSerializer):
 	class Meta:
-		model = Society
-		depth = 2
+		model = NetworkOperatorCity
+		depth = 1
 		fields = (
 			'id',
-			'name',
-			'sector',
-			'siren', 
+			'city',
+			'network',
+			'operator', 
 			)
-"""

@@ -50,27 +50,28 @@ def lamber93_to_gps(x, y):
 
 
 def replace_lambert93_by_gps(df):
-	dfXY = df[['X', 'Y']].copy()
-	dfXY[['lat', 'lng']] = dfXY.parallel_apply(lambda row : pandas.Series((lamber93_to_gps(row['X'], row['Y']))), axis = 1)
-	dfXY.drop(['X', 'Y'],axis=1, inplace=True)
-	df = pandas.concat([df, dfXY], axis=1)
+	df_xy = df[['X', 'Y']].copy()
+	df_xy[['lat', 'lng']] = df_xy.parallel_apply(lambda row : pandas.Series((lamber93_to_gps(row['X'], row['Y']))), axis = 1)
+	df_xy.drop(['X', 'Y'],axis=1, inplace=True)
+	df = pandas.concat([df, df_xy], axis=1)
 	df.drop(['X', 'Y'],axis=1, inplace=True)
 	df.to_csv('static/processed_op_gps_df.csv', index=False)
 	return df
 
 def get_city_from_gps(csvFile):
 	resp = requests.post('https://api-adresse.data.gouv.fr/reverse/csv/', files={'data': csvFile})
+	resp.encoding = resp.apparent_encoding
 	resp.raise_for_status()
 	data = resp.text
 	return data
 
 def replace_long_lat_by_city(df):
-	dfLl = df[['lat', 'lng']]
-	dfLl.to_csv('static/dfLl.csv', index=False)
+	df_Ll = df[['lat', 'lng']]
+	df_Ll.to_csv('static/dfLl.csv', index=False)
 	with open('static/dfLl.csv') as csvFile:
 		data = get_city_from_gps(csvFile)
 	buffer = io.StringIO(data)
-	data_df = pandas.read_csv(buffer, delimiter=',', header=0)
+	data_df = pandas.read_csv(buffer, delimiter=',', header=0, )
 	data_df.dropna(subset=['result_city'], inplace=True)
 
 	df = df.round({'lng': 2, 'lat': 2})
@@ -82,16 +83,17 @@ def replace_long_lat_by_city(df):
 	op_city_df.to_csv('static/op_city_df.csv', index=False)
 	return op_city_df
 
-#df = get_data_frame()
-#op_df = replace_code_by_operator(df)
-#op_gps_df = replace_lambert93_by_gps(op_df)
-#op_gps_df = pandas.read_csv('static/processed_op_gps_df.csv',
-#                                          header=0,
-#                                          delimiter=',')
-#op_city_df = replace_long_lat_by_city(op_gps_df)
-op_city_df = pandas.read_csv('static/op_city_df.csv',
-                                          header=0,
-                                          delimiter=',')
+if __name__ == "__main__":
+	df = get_data_frame()
+	op_df = replace_code_by_operator(df)
+	op_gps_df = replace_lambert93_by_gps(op_df)
+	op_gps_df = pandas.read_csv('static/processed_op_gps_df.csv',
+	                                          header=0,
+	                                          delimiter=',')
+	op_city_df = replace_long_lat_by_city(op_gps_df)
+	#op_city_df = pandas.read_csv('static/op_city_df.csv',
+	#                                          header=0,
+	#                                          delimiter=',')
 
-print(op_city_df)
+	print(op_city_df)
 
