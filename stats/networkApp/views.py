@@ -5,9 +5,9 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .services import *
-from .serializers import *
-
+from .services import getNetworkGroupedByOperators, getCityFromPostCode
+#from .serializers import NOCSerializer
+from .models import NetworkOperatorCity
 
 class NetworkAPI(APIView):
 

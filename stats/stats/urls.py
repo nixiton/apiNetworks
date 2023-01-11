@@ -14,14 +14,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.conf.urls import url
+from django.conf.urls import url, include
 
 from django.contrib import admin
 
-from networkApp.views import *
+from networkApp.views import NetworkAPI
+
+from django.conf import settings
 
 urlpatterns = [
     url(r'^administrate/', admin.site.urls),
     url(r'^networkApi/', NetworkAPI.as_view(),  name='netApi'),
-    #url(r'^networkApi/', NetworkAPI.as_view(),  name='netApi'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += [url(r'silk/', include('silk.urls', namespace='silk'))]

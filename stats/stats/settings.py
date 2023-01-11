@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'networkApp',
     "rest_framework",
     'corsheaders',
+    'silk',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'silk.middleware.SilkyMiddleware',
 ]
 
 ROOT_URLCONF = 'stats.urls'
@@ -134,35 +136,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CELERY
 
-CELERY_BROKER_URL = 'redis://redis:6379'  # Docker
-
-
-# gmail
-
-#DataFlair
-EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'nixitonbira@gmail.com'
-EMAIL_HOST_PASSWORD = 'xbpskaroopcvshjq'
-RECIPIENT_ADDRESS = ["nixitonbira@gmail.com",]
-
+#CELERY_BROKER_URL = 'redis://redis:6379'  # Docker
 
 
 
 # CROSS SETTINGS
 
-#CORS_ORIGIN_ALLOW_ALL = True
-
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-]
-
-CSRF_TRUSTED_ORIGINS = [
-        'http://localhost:3000',
-        'http://127.0.0.1:3000',
-    ]
+CORS_ORIGIN_ALLOW_ALL = True
 
 

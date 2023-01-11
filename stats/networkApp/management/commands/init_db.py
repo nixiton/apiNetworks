@@ -3,7 +3,7 @@ from networkApp.models import *
 import pandas
 
 class Command(BaseCommand):
-    help = 'Pupulates the database with the datas from static/op_city_df.csv.'
+    help = 'Populates the database with the datas from static/op_city_df.csv.'
 
     def handle(self, *args, **options):
         try:

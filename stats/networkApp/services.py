@@ -1,18 +1,8 @@
 
 from urllib.parse import urlparse
 
-import logging
-
-from .models import *
-
-from .tasks import *
-
-import json
-
 import pgeocode
 
-# Get an instance of a logger
-logger = logging.getLogger(__name__)
 
 def getNetworkGroupedByOperators(list):
 	playload = {}

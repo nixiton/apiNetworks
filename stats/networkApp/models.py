@@ -1,11 +1,4 @@
 from django.db import models
-from django import forms
-
-import logging
-
-# Create your models here.
-
-logger = logging.getLogger(__name__)
 
 class Base(models.Model):
 	name = models.CharField(max_length=50, blank = False, unique = True, db_index = True)
