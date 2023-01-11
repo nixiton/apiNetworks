@@ -17,3 +17,11 @@ redis
 coverage
 
 django-cors-headers
+
+pyproj
+
+pandarallel
+
+pgeocode
+
+django-silk

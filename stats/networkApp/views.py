@@ -5,24 +5,22 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .services import *
-from .serializers import *
+from .services import getNetworkGroupedByOperators, getCityFromPostCode
+#from .serializers import NOCSerializer
+from .models import NetworkOperatorCity
 
-"""
-class FetchingAPI(APIView):
-
-    def get(self, request, **kwargs):
-    	filePath = "static/test_python.json"
-    	result = saveToDB(filePath)
-    	if result["error"]:
-    		return Response(result["value"], status = 500)
-    	return Response(result["value"], status = 200)
-
-
-class ListAPI(APIView):
+class NetworkAPI(APIView):
 
     def get(self, request, **kwargs):
-    	listSociety = Society.objects.select_related('sector').all()
-    	listSociety = SocietySerializer(listSociety, many=True)
-    	return Response(listSociety.data, status = 200)
-"""
+        adress = request.GET['q']
+        city = adress.split(" ")[-1]
+        infonet = NetworkOperatorCity.objects.select_related('city').select_related('operator').select_related('network').filter(city__name = city)
+        infonet = getNetworkGroupedByOperators(infonet)
+        #infonet = NOCSerializer(infonet, many=True)
+
+        if(len(infonet) == 0):
+            city = getCityFromPostCode(city)
+            infonet = NetworkOperatorCity.objects.select_related('city').select_related('operator').select_related('network').filter(city__name = city)
+            infonet = getNetworkGroupedByOperators(infonet)
+
+        return Response(infonet, status = 200)
